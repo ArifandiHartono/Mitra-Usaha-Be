@@ -2,8 +2,8 @@ const express = require('express');
 const cors = require('cors');
 const serve   = require('express-static');
 
-const user = require('./routes/user');
-const undangan = require('./routes/undangan');
+const transaksi = require('./routes/transaksi');
+const barang = require('./routes/barang');
 const admin = require('./routes/admin');
 
 
@@ -16,8 +16,8 @@ app.use(express.urlencoded({ extended: true }));
 
 app.use(cors());
 
-app.use('/v1', user);
-app.use('/v1', undangan);
+app.use('/v1', barang);
+app.use('/v1', transaksi);
 app.use('/v1', admin)
 
 

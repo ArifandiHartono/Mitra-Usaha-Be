@@ -19,7 +19,7 @@ class transaksiController {
 
           for(let items of data)
           {
-            let barangdata = await barang.findOne({where:{kode : items.kode}})
+            let barangdata = await barang.findOne({where:{kode : items.kode, is_delete : false}})
             let kategoridata = await kategori.findByPk(barangdata.id_kategori)
             items.nama = barangdata.nama
             items.kategori = kategoridata.name 
