@@ -15,13 +15,13 @@ module.exports = {
         type: Sequelize.STRING
       },
       total: {
-        type: Sequelize.NUMBER
+        type: Sequelize.DECIMAL
       },
       pembayaran: {
-        type: Sequelize.NUMBER
+        type: Sequelize.DECIMAL
       },
       kembalian: {
-        type: Sequelize.NUMBER
+        type: Sequelize.DECIMAL
       },
       banyak_item: {
         type: Sequelize.INTEGER

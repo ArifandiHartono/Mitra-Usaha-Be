@@ -16,9 +16,9 @@ module.exports = (sequelize, DataTypes) => {
   transaksi.init({
     tanggal: DataTypes.DATE,
     invoice: DataTypes.STRING,
-    total: DataTypes.NUMBER,
-    pembayaran: DataTypes.NUMBER,
-    kembalian: DataTypes.NUMBER,
+    total: DataTypes.DECIMAL,
+    pembayaran: DataTypes.DECIMAL,
+    kembalian: DataTypes.DECIMAL,
     banyak_item: DataTypes.INTEGER
   }, {
     sequelize,

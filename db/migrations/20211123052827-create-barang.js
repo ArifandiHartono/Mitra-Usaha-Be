@@ -11,6 +11,10 @@ module.exports = {
       nama: {
         type: Sequelize.STRING
       },
+      harga: {
+        type: Sequelize.DECIMAL
+      }
+      ,
       stok: {
         type: Sequelize.INTEGER
       },
@@ -23,6 +27,9 @@ module.exports = {
       kode: {
         type: Sequelize.STRING
       },
+      foto: {
+        type: Sequelize.STRING
+      },
       is_delete: {
         type: Sequelize.BOOLEAN
       },
@@ -33,7 +40,8 @@ module.exports = {
       updatedAt: {
         allowNull: false,
         type: Sequelize.DATE
-      }
+      },
+      
     });
   },
   down: async (queryInterface, Sequelize) => {

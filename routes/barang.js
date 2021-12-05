@@ -20,20 +20,20 @@ router.get('/Barang/getallstock', BarangController.getAllStock);
 
 router.get('/Barang/:id_kategori', BarangController.getByKategori);
 
-router.get('/Barang/:kode', BarangController.getByKode);
+router.get('/Barangkode/:kode', BarangController.getByKode);
 
-router.get('/Barang/:id', BarangController.update);
+router.put('/Barang/stockupdate/:id', BarangController.updateStock);
 
 
 // update Barang
 router.put(
-  '/Barang/update/:id',[passport.authenticate('admin', { session: false })],
+  '/Barang/update/:id',
    BarangController.update
 );
 
 // delete Barang
 router.delete(
-  '/Barang/delete/:id',[passport.authenticate('admin', { session: false })],
+  '/Barang/delete/:id',
     BarangController.delete
 );
 

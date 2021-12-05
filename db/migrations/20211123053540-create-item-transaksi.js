@@ -15,7 +15,7 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       total_harga: {
-        type: Sequelize.NUMBER
+        type: Sequelize.DECIMAL
       },
       id_transaksi: {
         type: Sequelize.INTEGER

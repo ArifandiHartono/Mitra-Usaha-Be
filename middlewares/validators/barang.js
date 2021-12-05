@@ -16,7 +16,7 @@ const unlinkAsync = promisify(fs.unlink);
 
 const uploadDir = ''; // make images upload to /img/
 const storage = multer.diskStorage({
-  destination: `./uploads/foto/member`, // make images upload to /public/img/
+  destination: `./uploads/foto/barang`, // make images upload to /public/img/
   filename(req, file, cb) {
     // eslint-disable-next-line security/detect-pseudoRandomBytes
     crypto.pseudoRandomBytes(16, function (err, raw) {
@@ -171,9 +171,9 @@ module.exports = {
       next();
     },
   ],
-  update: [
-    upload.single('profilPic'),
-    check('profilPic')
+  createbarang: [
+    upload.single('foto'),
+    check('foto')
       .custom((value, { req }) => {
         if (req.file === undefined) {
           return true;
@@ -184,7 +184,7 @@ module.exports = {
         return false;
       })
       .withMessage('file upload must be images file'),
-    check('profilPic')
+    check('foto')
       .custom((value, { req }) => {
         if (req.file === undefined) {
           return true;
@@ -195,60 +195,52 @@ module.exports = {
         return true;
       })
       .withMessage('file size max 5mb'),
-    check('namaLengkap')
-      .notEmpty()
-      .withMessage('name cant null')
-      .matches(/^[a-zA-Z ']{3,200}$/)
-      .withMessage('invalid name value'),
-    check('alamat')
-      .notEmpty()
-      .withMessage('alamat cant null')
-      .matches(/^[a-zA-Z0-9.,:=/_ ]{3,200}$/)
-      .withMessage('invalid value'),
-    check('tglLahir')
-      .notEmpty()
-      .withMessage('Tanggal Lahir cant null')
-      .custom((value) => {
-        return new Date(value);
-      })
-      .isDate()
-      .withMessage('invalid input'),
-    check('email')
-      .notEmpty()
-      .withMessage('email cant null')
-      .normalizeEmail({
-        gmail_remove_dots: false,
-      })
-      .isEmail()
-      .withMessage('email must be email address')
-      .custom(async (email, { req }) => {
-        const user = findByEmail(email);
-        if (!user.isEmpty() && user.id != req.user.id) {
-          throw new Error('email already used!');
-        } else {
+    async (req, res, next) => {
+      const errors = myValidationResult(req);
+      if (!errors.isEmpty()) {
+        // try {
+        //   const params = {
+        //     Bucket: config.aws.bucket,
+        //     Key: req.file.filename,
+        //   };
+        //   await s3.send(new DeleteObjectCommand(params));
+        // } catch (error) {
+        //   console.log(error);
+        // }
+        if (req.file) {
+          await unlinkAsync(req.file.path);
+        }
+        return res.status(422).json({
+          errors: errors.mapped({}),
+        });
+      }
+      next();
+    },
+  ],
+  updatebarang: [
+    upload.single('foto'),
+    check('foto')
+      .custom((value, { req }) => {
+        if (req.file === undefined) {
           return true;
         }
-      }),
-    check('username')
-      .notEmpty()
-      .withMessage('username cant null')
-      .matches(/^[a-zA-Z0-9_]{3,200}$/)
-      .withMessage('username must have 3 to 32 characters without any space')
-      .custom(async (username, { req }) => {
-        const user = findByUsername(username);
-        if (user && user.id !== req.user.id) {
-          throw new Error('username already used!');
-        } else {
+        if (req.file.mimetype.startsWith('image')) {
           return true;
         }
-      }),
-    check('password')
-      .notEmpty()
-      .withMessage('password cant null')
-      .isLength({
-        min: 6,
+        return false;
       })
-      .withMessage('password min 6 characters'),
+      .withMessage('file upload must be images file'),
+    check('foto')
+      .custom((value, { req }) => {
+        if (req.file === undefined) {
+          return true;
+        }
+        if (req.file.size > 5 * 1024 * 1024) {
+          return false;
+        }
+        return true;
+      })
+      .withMessage('file size max 5mb'),
     async (req, res, next) => {
       const errors = myValidationResult(req);
       if (!errors.isEmpty()) {

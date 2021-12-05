@@ -8,11 +8,16 @@ class barangController {
     async create(req, res) {
         try {
             var today = new Date();
-            var dd = String(today.getDate()).pdStart(2, '0');
+            var dd = String(today.getDate()).padStart(2, '0');
             var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
             var yyyy = today.getFullYear();
             req.body.is_delete = false
           const result = await barang.create(req.body);
+          if(req.file != null || req.file != undefined)
+          {
+            req.body.foto = req.file.filename
+          }
+          
           result.kode = mm + dd + yyyy + result.id;
           result.save()
           res.status(200).json({
@@ -20,6 +25,7 @@ class barangController {
             data: result,
           });
         } catch (error) {
+          console.log(error)
           res.status(500).json({
             status: 'Error',
             message: 'Request failed',
@@ -91,10 +97,12 @@ class barangController {
     
 
       async getByKode(req, res) {
+        
         try {
+          console.log("sini ye")
           const result = await barang.findAll({ where: { kode: req.params.kode } });
           res.status(200).json({
-            status: 'Success',
+            status: 'Success getting barang',
             data: result,
           });
         } catch (error) {
@@ -124,6 +132,25 @@ class barangController {
         }
       }
     
+
+      async updateStock(req, res) {
+        try {
+          const result = await barang.findByPk(req.params.id);
+          result.stok = result.stok + req.body.stok
+          console.log(result.stock)
+          result.save()
+          res.status(200).json({
+            status: 'Success',
+            data: result,
+          });
+        } catch (error) {
+          res.status(500).json({
+            status: 'Error',
+            message: 'Request failed',
+          });
+        }
+      }
+
       async delete(req, res) {
         try {
           await barang.update({is_delete: true},{ where: { id: req.params.id } });

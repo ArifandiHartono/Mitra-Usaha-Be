@@ -1,14 +1,16 @@
 const tokenGenerator = require('../services/token-generator');
-const { transaksi , item_transaksi } = require('../models');
+const { transaksi , item_transaksi , barang , kategori } = require('../models');
 const config = require('../config');
 const { compareSync } = require('bcrypt');
 const bcrypt = require('bcrypt');
+const { Op } =  require('sequelize')
 
 class transaksiController {
     async create(req, res) {
         try {
           var today = new Date();
-          var dd = String(today.getDate()).pdStart(2, '0');
+          req.body.tanggal = today
+          var dd = String(today.getDate()).padStart(2, '0');
           var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
           var yyyy = today.getFullYear();
           const result = await transaksi.create(req.body);
@@ -23,7 +25,7 @@ class transaksiController {
             let kategoridata = await kategori.findByPk(barangdata.id_kategori)
             items.nama = barangdata.nama
             items.kategori = kategoridata.name 
-            items,id_barang = barangdata.id;
+            items.id_barang = barangdata.id;
             items.id_transaksi = result.id;
             await item_transaksi.create(items)
           }
@@ -33,6 +35,7 @@ class transaksiController {
             item: data
           });
         } catch (error) {
+          console.log(error)
           res.status(500).json({
             status: 'Error',
             message: 'Request failed',
@@ -83,19 +86,26 @@ class transaksiController {
           }
           ,
           attributes: ['id']
-          
         });
+        let idarray = []
+        for(let iddata of result)
+        {
+          idarray.push(iddata.id)
+        }
+
+        console.log(idarray)
+
         let itemtoday = await item_transaksi.findAll({where: 
         {
-          id_transaksi: result
+          id_transaksi: idarray
         }
         ,group: ['id_barang']
         ,raw:true
       })
         for(let databarang of itemtoday)
         {
-          barangdata = await barang.findByPk(databarang.id_barang)
-          for(var k in barangdata) databarang[k]=barangdata[k];
+          let barangdata = await barang.findByPk(databarang.id_barang)
+          for(var k in barangdata.dataValues) databarang[k]=barangdata[k];
           let itemtocount = await item_transaksi.findAll({where: 
             {
               id_transaksi: result
@@ -111,7 +121,7 @@ class transaksiController {
             totalharga = totalharga + datahitung.totalharga
           }
           databarang.jumlah = jumlah
-          databarang.total_harga = total_harga
+          databarang.total_harga = totalharga
         }
 
           res.status(200).json({
@@ -119,6 +129,7 @@ class transaksiController {
             data: itemtoday,
           });
         } catch (error) {
+          console.log(error)
           res.status(500).json({
             status: 'Error',
             message: 'Request failed',
@@ -166,8 +177,9 @@ class transaksiController {
 
       async getById(req, res) {
         try {
-          const result = await transaksi.findAll({ where :{ id : req.params.id}
+          const result = await transaksi.findOne({ where :{ id : req.params.id}
         });
+
         let itemtoday = await item_transaksi.findAll({where: 
           {
             id_transaksi: result.id
@@ -177,8 +189,8 @@ class transaksiController {
 
         for(let databarang of itemtoday)
         {
-          barangdata = await barang.findByPk(databarang.id_barang)
-          for(var k in barangdata) databarang[k]=barangdata[k];
+          let barangdata = await barang.findByPk(databarang.id_barang)
+          for(var k in barangdata.dataValues) databarang[k]=barangdata[k];
             
         }
 
@@ -186,8 +198,10 @@ class transaksiController {
           res.status(200).json({
             status: 'Success',
             data: result,
+            item: itemtoday
           });
         } catch (error) {
+          console.log(error)
           res.status(500).json({
             status: 'Error',
             message: 'Request failed',
