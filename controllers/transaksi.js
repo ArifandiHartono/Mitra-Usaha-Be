@@ -78,11 +78,11 @@ class transaksiController {
 
           var end = new Date(req.params.tanggal);
           end.setUTCHours(23,59,59,999);
-          const result = await transaksi.findAll({where:{
-            tanggal:{
-              [Op.lte]: end,
-              [Op.gte]: start
-          }            
+            const result = await transaksi.findAll({where:{
+              tanggal:{
+                [Op.lte]: end,
+                [Op.gte]: start
+            }            
           }
           ,
           attributes: ['id']
@@ -122,6 +122,10 @@ class transaksiController {
           }
           databarang.jumlah = jumlah
           databarang.total_harga = totalharga
+          let kategoridata = await kategori.findByPk(databarang.id_kategori)
+          barangdata.kategori = kategoridata.nama
+          
+
         }
 
           res.status(200).json({
@@ -191,6 +195,10 @@ class transaksiController {
         {
           let barangdata = await barang.findByPk(databarang.id_barang)
           for(var k in barangdata.dataValues) databarang[k]=barangdata[k];
+
+          let kategoridata = await kategori.findByPk(barangdata.id_kategori)
+          databarang.kategori = kategoridata.nama
+
             
         }
 
