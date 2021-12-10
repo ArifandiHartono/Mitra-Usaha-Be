@@ -1,8 +1,9 @@
 const tokenGenerator = require('../services/token-generator');
-const { barang } = require('../models');
+const { barang, kategori } = require('../models');
 const config = require('../config');
 const { compareSync } = require('bcrypt');
 const bcrypt = require('bcrypt');
+const {Op} = require("sequelize");
 
 class barangController {
     async create(req, res) {
@@ -36,8 +37,13 @@ class barangController {
 
       async getAll(req, res) {
         try {
-          const result = await barang.findAll({where:{is_delete : false}});
-          
+          const result = await barang.findAll({where:{is_delete : false}, raw:true});
+          for(let barangdata of result)
+          {
+            let kategoridata = await kategori.findByPk(barangdata.id_kategori)
+            barangdata.kategori = kategoridata.nama
+          }
+
           res.status(200).json({
             status: 'Success',
             data: result,
@@ -62,6 +68,11 @@ class barangController {
         }  
         result.sort((a, b) => parseFloat(b.selisih) - parseFloat(a.selisih));
         
+        for(let barangdata of result)
+          {
+            let kategoridata = await kategori.findByPk(barangdata.id_kategori)
+            barangdata.kategori = kategoridata.nama
+          }
 
           res.status(200).json({
             status: 'Success',
@@ -80,13 +91,24 @@ class barangController {
 
       async getByKategori(req, res) {
         try {
-          const result = await barang.findAll({where:{is_delete : false, id_kategori:req.params.id_kategori}});
-          
+          const result = await barang.findAll({where:{is_delete : false, id_kategori:
+            {
+              [Op.in]: req.body.id_kategori
+            }
+            }});
+          for(let barangdata of result)
+          {
+            let kategoridata = await kategori.findByPk(barangdata.id_kategori)
+            barangdata.kategori = kategoridata.nama
+          }
+
+
           res.status(200).json({
             status: 'Success',
             data: result,
           });
         } catch (error) {
+          console.log(error)
           res.status(500).json({
             status: 'Error',
             message: 'Request failed',
@@ -100,7 +122,11 @@ class barangController {
         
         try {
           console.log("sini ye")
-          const result = await barang.findAll({ where: { kode: req.params.kode } });
+          const result = await barang.findOne({ where: { kode: req.params.kode , is_delete:false } });
+            let kategoridata = await kategori.findByPk(result.id_kategori)
+            result.kategori = kategoridata.nama
+          
+
           res.status(200).json({
             status: 'Success getting barang',
             data: result,

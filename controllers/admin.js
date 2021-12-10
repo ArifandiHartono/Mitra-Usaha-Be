@@ -27,6 +27,13 @@ class AdminController {
         try {
             console.log("sini kah")
             let token = tokenGenerator(user.dataValues.id, config.jwt.secretKey, config.jwt.expiresIn);
+            let userata = await Admin.findByPk(user.dataValues.id)
+            let role = "kasir"
+            if(userata.username.toLowerCase().includes("admin"))
+            {
+              role = "admin"
+            }
+
             console.log(token)
             if (user == null)
                 throw new Error("Failed Data Credential")
