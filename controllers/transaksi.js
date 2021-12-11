@@ -123,7 +123,7 @@ class transaksiController {
           databarang.jumlah = jumlah
           databarang.total_harga = totalharga
           let kategoridata = await kategori.findByPk(databarang.id_kategori)
-          barangdata.kategori = kategoridata.nama
+          barangdata.kategori = kategoridata.name
           
 
         }
@@ -197,7 +197,7 @@ class transaksiController {
           for(var k in barangdata.dataValues) databarang[k]=barangdata[k];
 
           let kategoridata = await kategori.findByPk(barangdata.id_kategori)
-          databarang.kategori = kategoridata.nama
+          databarang.kategori = kategoridata.name
 
             
         }

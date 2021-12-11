@@ -41,7 +41,7 @@ class barangController {
           for(let barangdata of result)
           {
             let kategoridata = await kategori.findByPk(barangdata.id_kategori)
-            barangdata.kategori = kategoridata.nama
+            barangdata.kategori = kategoridata.name
           }
 
           res.status(200).json({
@@ -71,7 +71,7 @@ class barangController {
         for(let barangdata of result)
           {
             let kategoridata = await kategori.findByPk(barangdata.id_kategori)
-            barangdata.kategori = kategoridata.nama
+            barangdata.kategori = kategoridata.name
           }
 
           res.status(200).json({
@@ -99,7 +99,7 @@ class barangController {
           for(let barangdata of result)
           {
             let kategoridata = await kategori.findByPk(barangdata.id_kategori)
-            barangdata.kategori = kategoridata.nama
+            barangdata.kategori = kategoridata.name
           }
 
 
@@ -124,7 +124,7 @@ class barangController {
           console.log("sini ye")
           const result = await barang.findOne({ where: { kode: req.params.kode , is_delete:false } });
             let kategoridata = await kategori.findByPk(result.id_kategori)
-            result.kategori = kategoridata.nama
+            result.kategori = kategoridata.name
           
 
           res.status(200).json({
