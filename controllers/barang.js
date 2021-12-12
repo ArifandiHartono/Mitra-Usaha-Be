@@ -222,7 +222,10 @@ class barangController {
 
       async search(req, res) {
         try {
-          const result = await barang.findAll({ where :{[Op.or]: 
+          let result = []
+          if(req.params.id.length > 0 && req.params.id !=null)
+          {
+          result = await barang.findAll({ where :{[Op.or]: 
             [
               { kode : 
                 {
@@ -239,7 +242,13 @@ class barangController {
             is_delete:false
           }
         ,raw:true});
-
+        }else
+        {
+          result = await barang.findAll({ where :{
+            is_delete:false
+          }
+        ,raw:true});
+        }
 
         for(let databarang of result)
         {

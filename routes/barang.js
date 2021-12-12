@@ -27,6 +27,8 @@ router.get('/Barangbysinglecategory/:id_kategori', BarangController.getByKategor
 
 
 router.get('/Barangsearch/:id', BarangController.search);
+router.get('/Barangsearch/', BarangController.getAll);
+
 
 
 router.get('/Barangkode/:kode', BarangController.getByKode);
