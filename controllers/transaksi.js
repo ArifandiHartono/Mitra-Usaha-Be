@@ -3,7 +3,8 @@ const { transaksi , item_transaksi , barang , kategori } = require('../models');
 const config = require('../config');
 const { compareSync } = require('bcrypt');
 const bcrypt = require('bcrypt');
-const { Op } =  require('sequelize')
+const { Op } =  require('sequelize');
+const { Result } = require('express-validator');
 
 class transaksiController {
     async create(req, res) {
@@ -109,7 +110,7 @@ class transaksiController {
 
           let itemtocount = await item_transaksi.findAll({where: 
             {
-              id_transaksi: databarang.id_transaksi
+              id_transaksi: idarray
               ,id_barang:barangdata.id
             }
             ,raw:true
@@ -120,7 +121,7 @@ class transaksiController {
           for(let datahitung of itemtocount)
           {
             jumlah = jumlah + datahitung.jumlah;
-            totalharga = parseFloat(totalharga) + parseFloat(datahitung.total_harga)
+            totalharga = parseFloat(totalharga) + (parseFloat(datahitung.jumlah)*parseFloat(barangdata.harga)) 
           }
           databarang.terjual = jumlah
           databarang.pendapatan = totalharga
@@ -163,13 +164,13 @@ class transaksiController {
         });
         let totalpendapatan = 0
         for(let data of result){
-          totalpendapatan = totalpendapatan + data.total
+          totalpendapatan = parseFloat(totalpendapatan) + parseFloat(data.total)
         }
 
 
           res.status(200).json({
             status: 'Success',
-            data: result,
+            data: totalpendapatan,
           });
         } catch (error) {
           res.status(500).json({
