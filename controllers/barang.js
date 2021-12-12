@@ -191,6 +191,54 @@ class barangController {
           });
         }
       }
+
+      async search(req, res) {
+        try {
+          const result = await barang.findAll({ where :{[Op.or]: 
+            [
+              { kode : 
+                {
+                 [Op.substring]: req.params.id
+                }
+              },
+              { nama : 
+                {
+                 [Op.substring]: req.params.id
+                }
+              }
+            ]
+            ,
+            is_delete:false
+          }
+        ,raw:true});
+
+
+        for(let databarang of result)
+        {
+          
+          let kategoridata = await kategori.findByPk(databarang.id_kategori)
+          databarang.kategori = kategoridata.name
+            
+        }
+
+
+          res.status(200).json({
+            status: 'Success',
+            data: result,
+          });
+        } catch (error) {
+          console.log(error)
+          res.status(500).json({
+            status: 'Error',
+            message: 'Request failed',
+            erross: error
+          });
+        }
+      }
+
+
+
+
     }
     
     module.exports = new barangController();
