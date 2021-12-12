@@ -106,22 +106,24 @@ class transaksiController {
         {
           let barangdata = await barang.findByPk(databarang.id_barang)
           for(var k in barangdata.dataValues) databarang[k]=barangdata[k];
+
           let itemtocount = await item_transaksi.findAll({where: 
             {
-              id_transaksi: result
-              ,id_barang:barangdata
+              id_transaksi: databarang.id_transaksi
+              ,id_barang:barangdata.id
             }
             ,raw:true
-          })  
+          }) 
+          console.log(itemtocount) 
           let jumlah = 0 
           let totalharga = 0
           for(let datahitung of itemtocount)
           {
-            jumlah = jumlah + datahitung.jumlah
-            totalharga = totalharga + datahitung.totalharga
+            jumlah = jumlah + datahitung.jumlah;
+            totalharga = parseFloat(totalharga) + parseFloat(datahitung.total_harga)
           }
-          databarang.jumlah = jumlah
-          databarang.total_harga = totalharga
+          databarang.terjual = jumlah
+          databarang.pendapatan = totalharga
           let kategoridata = await kategori.findByPk(databarang.id_kategori)
           barangdata.kategori = kategoridata.name
           
