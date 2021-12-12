@@ -265,6 +265,24 @@ class barangController {
       }
 
 
+      async getAllKategori(req, res) {
+        try {
+          const result = await kategori.findAll({raw:true});
+          
+          res.status(200).json({
+            status: 'Success',
+            data: result,
+          });
+        } catch (error) {
+          res.status(500).json({
+            status: 'Error',
+            message: 'Request failed',
+            erross: error
+          });
+        }
+      }
+
+
 
 
     }

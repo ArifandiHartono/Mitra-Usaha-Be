@@ -18,6 +18,9 @@ router.get('/Barang/getall', BarangController.getAll);
 // get by id Barang
 router.get('/Barang/getallstock', BarangController.getAllStock);
 
+router.get('/Kategori/getall', BarangController.getAllKategori);
+
+
 router.post('/Barang', BarangController.getByKategori);
 
 router.get('/Barangbysinglecategory/:id_kategori', BarangController.getByKategoriSingle);
