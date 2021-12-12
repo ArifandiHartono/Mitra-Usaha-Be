@@ -118,6 +118,34 @@ class barangController {
       }
     
 
+      async getByKategoriSingle(req, res) {
+        try {
+          const result = await barang.findAll({where:{is_delete : false, id_kategori:req.params.id_kategori}});
+          for(let barangdata of result)
+          {
+            let kategoridata = await kategori.findByPk(barangdata.id_kategori)
+            barangdata.kategori = kategoridata.name
+          }
+
+
+          res.status(200).json({
+            status: 'Success',
+            data: result,
+          });
+        } catch (error) {
+          console.log(error)
+          res.status(500).json({
+            status: 'Error',
+            message: 'Request failed',
+            erross: error
+          });
+        }
+      }
+    
+
+
+
+
       async getByKode(req, res) {
         
         try {
