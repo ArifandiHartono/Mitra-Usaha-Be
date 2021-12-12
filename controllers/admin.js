@@ -41,6 +41,7 @@ class AdminController {
                 status: "success",
                 message: "Success Login",
                 token,
+                role
             }
             res.status(200).json(result)
         } catch (e) {
