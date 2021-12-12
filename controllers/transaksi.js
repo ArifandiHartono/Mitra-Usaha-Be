@@ -72,6 +72,37 @@ class transaksiController {
         }
       }
 
+      async getAllSearch(req, res) {
+        try {
+          var start = new Date(req.params.tanggal);
+          start.setUTCHours(0,0,0,0);
+
+          var end = new Date(req.params.tanggal);
+          end.setUTCHours(23,59,59,999);
+          const result = await transaksi.findAll({where:{
+            tanggal:{
+              [Op.lte]: end,
+              [Op.gte]: start
+          },
+          invoice :{
+            [Op.substring]: req.params.search
+          }   
+          }});
+          
+          res.status(200).json({
+            status: 'Success',
+            data: result,
+          });
+        } catch (error) {
+          res.status(500).json({
+            status: 'Error',
+            message: 'Request failed',
+            erross: error
+          });
+        }
+      }
+
+
       async getAllHistoristock(req, res) {
         try {
           var start = new Date(req.params.tanggal);
@@ -144,6 +175,108 @@ class transaksiController {
           });
         }
       }
+
+
+      async getAllHistoristockSearch(req, res) {
+        try {
+          var start = new Date(req.params.tanggal);
+          start.setUTCHours(0,0,0,0);
+
+          var end = new Date(req.params.tanggal);
+          end.setUTCHours(23,59,59,999);
+            const result = await transaksi.findAll({where:{
+              tanggal:{
+                [Op.lte]: end,
+                [Op.gte]: start
+            }            
+          }
+          ,
+          attributes: ['id']
+        });
+        let idarray = []
+        for(let iddata of result)
+        {
+          idarray.push(iddata.id)
+        }
+
+        console.log(idarray)
+
+        let itemtoday = await item_transaksi.findAll({where: 
+        {
+          id_transaksi: idarray
+        }
+        ,group: ['id_barang']
+        ,raw:true
+      })
+        for(let databarang of itemtoday)
+        {
+          let barangdata = await barang.findByPk(databarang.id_barang)
+          for(var k in barangdata.dataValues) databarang[k]=barangdata[k];
+
+          let itemtocount = await item_transaksi.findAll({where: 
+            {
+              id_transaksi: idarray
+              ,id_barang:barangdata.id
+            }
+            ,raw:true
+          }) 
+          console.log(itemtocount) 
+          let jumlah = 0 
+          let totalharga = 0
+          for(let datahitung of itemtocount)
+          {
+            jumlah = jumlah + datahitung.jumlah;
+            totalharga = parseFloat(totalharga) + (parseFloat(datahitung.jumlah)*parseFloat(barangdata.harga)) 
+          }
+          databarang.terjual = jumlah
+          databarang.pendapatan = totalharga
+          let kategoridata = await kategori.findByPk(databarang.id_kategori)
+          barangdata.kategori = kategoridata.name
+          
+        }
+
+        let finaldata = []
+        for(let dataitem of itemtoday)
+        {
+          if(dataitem.nama.toLowerCase().includes(req.params.search))
+          {
+              finaldata.push(dataitem)
+          }
+          if(dataitem.kode.toLowerCase().includes(req.params.search))
+          {
+            let check = 0;
+            for(let datafinal of finaldata)
+            {
+              if(finaldata.length == 0)
+              {
+                finaldata.push(dataitem)
+              }else
+              if(datafinal == dataitem){
+                check = 1
+                break;
+              }
+            }
+              if(check == 0)
+              {
+                finaldata.push(dataitem)
+              }
+          }
+        }
+
+          res.status(200).json({
+            status: 'Success',
+            data: finaldata,
+          });
+        } catch (error) {
+          console.log(error)
+          res.status(500).json({
+            status: 'Error',
+            message: 'Request failed',
+            erross: error
+          });
+        }
+      }
+
 
 
 
