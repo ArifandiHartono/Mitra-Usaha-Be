@@ -29,6 +29,12 @@ class transaksiController {
             items.id_barang = barangdata.id;
             items.id_transaksi = result.id;
             await item_transaksi.create(items)
+            barangdata.stok = parseInt(barangdata.stok) - parseInt(items.jumlah)
+            barangdata.save()
+            if(barangdata.stok <= barangdata.minimal_stok)
+            {
+              //ini notif create
+            }
           }
           res.status(200).json({
             status: 'Success',
