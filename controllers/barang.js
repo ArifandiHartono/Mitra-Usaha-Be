@@ -150,7 +150,7 @@ class barangController {
         
         try {
           console.log("sini ye")
-          const result = await barang.findOne({ where: { kode: req.params.kode , is_delete:false } });
+          const result = await barang.findOne({ where: { id: req.params.kode , is_delete:false } });
             let kategoridata = await kategori.findByPk(result.id_kategori)
             result.kategori = kategoridata.name
           
