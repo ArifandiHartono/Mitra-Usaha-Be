@@ -25,5 +25,9 @@ router.get('/transaksi/getpendapatan/:tanggal', transaksiController.getPendapata
 
 router.get('/transaksi/getbyid/:id', transaksiController.getById);
 
+router.get('/notif/getall', transaksiController.getAllNotif);
+
+router.get('/notif/countunread', transaksiController.countnotif);
+
 
 module.exports = router;

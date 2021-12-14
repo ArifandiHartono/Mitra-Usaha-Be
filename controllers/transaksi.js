@@ -1,9 +1,9 @@
 const tokenGenerator = require('../services/token-generator');
-const { transaksi , item_transaksi , barang , kategori } = require('../models');
+const {notif, transaksi , item_transaksi , barang , kategori } = require('../models');
 const config = require('../config');
 const { compareSync } = require('bcrypt');
 const bcrypt = require('bcrypt');
-const { Op } =  require('sequelize');
+const { Op, where } =  require('sequelize');
 const { Result } = require('express-validator');
 
 class transaksiController {
@@ -33,6 +33,8 @@ class transaksiController {
             barangdata.save()
             if(barangdata.stok <= barangdata.minimal_stok)
             {
+              createnotif = { isread: false, message: "Segera restock produk " + barangdata.nama }
+              await notif.create(createnotif)
               //ini notif create
             }
           }
@@ -359,6 +361,46 @@ class transaksiController {
           });
         }
       }      
+
+
+      async getAllNotif(req, res) {
+        try {
+          
+          const result = await notif.findAll();
+          await notif.update({isread : true},{where : {isread : false} })
+          
+          res.status(200).json({
+            status: 'Success',
+            data: result,
+          });
+        } catch (error) {
+          res.status(500).json({
+            status: 'Error',
+            message: 'Request failed',
+            erross: error
+          });
+        }
+      }
+
+
+
+      async countnotif(req, res) {
+        try {
+          
+          const result = await notif.count({where:{isread : false}});
+          
+          res.status(200).json({
+            status: 'Success',
+            data: result,
+          });
+        } catch (error) {
+          res.status(500).json({
+            status: 'Error',
+            message: 'Request failed',
+            erross: error
+          });
+        }
+      }
 
     }
     
