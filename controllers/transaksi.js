@@ -33,7 +33,7 @@ class transaksiController {
             barangdata.save()
             if(barangdata.stok <= barangdata.minimal_stok)
             {
-              createnotif = { isread: false, message: "Segera restock produk " + barangdata.nama }
+              let createnotif = { isread: false, message: "Segera restock produk " + barangdata.nama }
               await notif.create(createnotif)
               //ini notif create
             }
