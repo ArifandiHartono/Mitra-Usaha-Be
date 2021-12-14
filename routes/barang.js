@@ -33,6 +33,7 @@ router.get('/Barangsearch/', BarangController.getAll);
 
 router.get('/Barangkode/:kode', BarangController.getByKode);
 
+
 router.put('/Barang/stockupdate/:id', BarangController.updateStock);
 
 
