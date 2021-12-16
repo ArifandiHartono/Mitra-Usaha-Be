@@ -173,6 +173,7 @@ class barangController {
           result.is_delete = true;
           result.save()
           req.body.kode = result.kode
+          req.body.kode = false
           const updated = await barang.create(req.body);
           res.status(200).json({
             status: 'Success',
