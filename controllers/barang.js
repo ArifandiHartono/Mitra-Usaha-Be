@@ -8,6 +8,13 @@ const {Op} = require("sequelize");
 class barangController {
     async create(req, res) {
         try {
+          if(req.body.id_kategori == undefined || req.body.id_kategori == null)
+          {
+            res.status(422).json({
+              status: 'Error',
+              message: 'kategori harus di isi',
+            });
+          }
             var today = new Date();
             var dd = String(today.getDate()).padStart(2, '0');
             var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
@@ -173,7 +180,7 @@ class barangController {
           result.is_delete = true;
           result.save()
           req.body.kode = result.kode
-          req.body.kode = false
+          req.body.is_delete = false
           const updated = await barang.create(req.body);
           res.status(200).json({
             status: 'Success',
