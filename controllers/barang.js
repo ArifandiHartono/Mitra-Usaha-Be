@@ -95,7 +95,7 @@ class barangController {
             {
               [Op.in]: req.body.id_kategori
             }
-            }});
+            }, raw:true});
           for(let barangdata of result)
           {
             let kategoridata = await kategori.findByPk(barangdata.id_kategori)
@@ -120,7 +120,7 @@ class barangController {
 
       async getByKategoriSingle(req, res) {
         try {
-          const result = await barang.findAll({where:{is_delete : false, id_kategori:req.params.id_kategori}});
+          const result = await barang.findAll({where:{is_delete : false, id_kategori:req.params.id_kategori}, raw:true});
           for(let barangdata of result)
           {
             let kategoridata = await kategori.findByPk(barangdata.id_kategori)
