@@ -14,7 +14,7 @@ class barangController {
               status: 'Error',
               message: 'Semua data wajib di isi',
             });
-          }
+          }else{
             var today = new Date();
             var dd = String(today.getDate()).padStart(2, '0');
             var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
@@ -32,6 +32,7 @@ class barangController {
             status: 'Success',
             data: result,
           });
+          }
         } catch (error) {
           console.log(error)
           res.status(500).json({
