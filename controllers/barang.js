@@ -8,11 +8,11 @@ const {Op} = require("sequelize");
 class barangController {
     async create(req, res) {
         try {
-          if(req.body.id_kategori == undefined || req.body.id_kategori == null)
+          if(req.body.id_kategori == undefined || req.body.id_kategori == null || req.body.nama == undefined || req.body.nama == null || req.body.harga == undefined || req.body.harga == null)
           {
             res.status(422).json({
               status: 'Error',
-              message: 'kategori harus di isi',
+              message: 'Semua data wajib di isi',
             });
           }
             var today = new Date();
