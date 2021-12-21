@@ -16,15 +16,18 @@ module.exports = {
       }
       ,
       stok: {
-        type: Sequelize.INTEGER
+        type: Sequelize.FLOAT
       },
       minimal_stok: {
-        type: Sequelize.INTEGER
+        type: Sequelize.FLOAT
       },
       id_kategori: {
         type: Sequelize.INTEGER
       },
       kode: {
+        type: Sequelize.STRING
+      },
+      kodeharga: {
         type: Sequelize.STRING
       },
       foto: {

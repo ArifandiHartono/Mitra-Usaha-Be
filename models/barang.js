@@ -15,11 +15,12 @@ module.exports = (sequelize, DataTypes) => {
   };
   barang.init({
     nama: DataTypes.STRING,
-    stok: DataTypes.INTEGER,
+    stok: DataTypes.FLOAT,
     harga: DataTypes.DECIMAL,
-    minimal_stok: DataTypes.INTEGER,
+    minimal_stok: DataTypes.FLOAT,
     id_kategori: DataTypes.INTEGER,
     kode: DataTypes.STRING,
+    kodeharga : DataTypes.STRING,
     foto:DataTypes.STRING,
     is_delete: DataTypes.BOOLEAN
   }, {
