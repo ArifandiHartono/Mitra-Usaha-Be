@@ -5,10 +5,12 @@ const { compareSync } = require('bcrypt');
 const bcrypt = require('bcrypt');
 const { Op, where } =  require('sequelize');
 const { Result } = require('express-validator');
+const e = require('cors');
 
 class transaksiController {
     async create(req, res) {
         try {
+
           var today = new Date();
           req.body.tanggal = today
           var dd = String(today.getDate()).padStart(2, '0');
@@ -19,7 +21,20 @@ class transaksiController {
           result.save()
 
           let data = req.body.item;
+          
+          let BarangHabis = []
+          for(let items of data)
+          {
+            let barangdata = await barang.findOne({where:{kode : items.kode, is_delete : false}})
+            if(items.jumlah > barangdata.stok)
+            BarangHabis.push(barangdata.nama)
+            
+          }
+          console.log("sini")
+          console.log(BarangHabis.length)
 
+          if(BarangHabis.length == 0)
+          {
           for(let items of data)
           {
             let barangdata = await barang.findOne({where:{kode : items.kode, is_delete : false}})
@@ -43,6 +58,24 @@ class transaksiController {
             transaksi: result,
             item: data
           });
+        }else
+        {
+
+          let pesanerror = "Barang : "
+          let barangmin = null;
+          for(let barangperulangan of BarangHabis)
+          {
+            if( barang == null)
+            barangmin = barangperulangan
+            else
+            barangmin = barangperulangan+ ", " + barangperulangan   
+          }
+          pesanerror = pesanerror +barangmin + " Sudah Habis mohon restock"
+          res.status(500).json({
+            status: 'Success',
+            message: pesanerror
+          });
+        }
         } catch (error) {
           console.log(error)
           res.status(500).json({
