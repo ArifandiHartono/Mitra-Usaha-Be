@@ -199,7 +199,7 @@ class barangController {
       async updateStock(req, res) {
         try {
           const result = await barang.findByPk(req.params.id);
-          result.stok = result.stok + req.body.stok
+          result.stok = parseFloat(result.stok) + parseFloat(req.body.stok)
           console.log(result.stock)
           result.save()
           res.status(200).json({

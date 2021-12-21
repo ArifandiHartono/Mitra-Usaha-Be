@@ -44,7 +44,7 @@ class transaksiController {
             items.id_barang = barangdata.id;
             items.id_transaksi = result.id;
             await item_transaksi.create(items)
-            barangdata.stok = parseInt(barangdata.stok) - parseInt(items.jumlah)
+            barangdata.stok = parseFloat(barangdata.stok) - parseFloat(items.jumlah)
             barangdata.save()
             if(barangdata.stok <= barangdata.minimal_stok)
             {
