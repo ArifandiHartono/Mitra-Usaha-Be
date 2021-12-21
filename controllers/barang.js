@@ -8,7 +8,7 @@ const {Op} = require("sequelize");
 class barangController {
     async create(req, res) {
         try {
-          if(req.body.id_kategori == undefined || req.body.id_kategori == null || req.body.nama == undefined || req.body.nama == null || req.body.harga == undefined || req.body.harga == null || req.body.jumlah_stock == undefined || req.body.jumlah_stock == null)
+          if(req.body.id_kategori == undefined || req.body.id_kategori == null || req.body.nama == undefined || req.body.nama == null || req.body.harga == undefined || req.body.harga == null || req.body.stok == undefined || req.body.stok == null)
           {
             res.status(422).json({
               status: 'Error',
