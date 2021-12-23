@@ -12,7 +12,7 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       jumlah: {
-        type: Sequelize.INTEGER
+        type: Sequelize.FLOAT
       },
       total_harga: {
         type: Sequelize.DECIMAL

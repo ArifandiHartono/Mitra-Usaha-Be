@@ -300,6 +300,23 @@ class barangController {
         }
       }
 
+      async KategoriCreate(req, res) {
+        try {
+          const result = await kategori.create(req.body);
+          
+          res.status(200).json({
+            status: 'Success',
+            data: result,
+          });
+        } catch (error) {
+          res.status(500).json({
+            status: 'Error',
+            message: 'Request failed',
+            erross: error
+          });
+        }
+      }
+
 
 
 

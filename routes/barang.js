@@ -6,6 +6,9 @@ const BarangController = require('../controllers/barang');
 // create PenarikanVet
 router.post('/Barang/create', BarangController.create);
 
+router.post('/Kategori/create', BarangController.KategoriCreate);
+
+
 router.delete('/Barang/delete', BarangController.delete);
 
 
