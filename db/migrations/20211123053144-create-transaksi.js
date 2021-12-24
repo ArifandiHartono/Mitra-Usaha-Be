@@ -24,7 +24,7 @@ module.exports = {
         type: Sequelize.DECIMAL
       },
       banyak_item: {
-        type: Sequelize.INTEGER
+        type: Sequelize.FLOAT
       },
       createdAt: {
         allowNull: false,

@@ -19,7 +19,7 @@ module.exports = (sequelize, DataTypes) => {
     total: DataTypes.DECIMAL,
     pembayaran: DataTypes.DECIMAL,
     kembalian: DataTypes.DECIMAL,
-    banyak_item: DataTypes.INTEGER
+    banyak_item: DataTypes.FLOAT
   }, {
     sequelize,
     modelName: 'transaksi',

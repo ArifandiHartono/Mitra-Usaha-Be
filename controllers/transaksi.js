@@ -448,25 +448,25 @@ class transaksiController {
       var interval = seconds / 31536000;
     
       if (interval > 1) {
-        return Math.floor(interval) + " tahun yang lalu";
+        return Math.floor(interval) + " tahun lalu";
       }
       interval = seconds / 2592000;
       if (interval > 1) {
-        return Math.floor(interval) + " bulan yang lalu";
+        return Math.floor(interval) + " bulan lalu";
       }
       interval = seconds / 86400;
       if (interval > 1) {
-        return Math.floor(interval) + " hari yang lalu";
+        return Math.floor(interval) + " hari lalu";
       }
       interval = seconds / 3600;
       if (interval > 1) {
-        return Math.floor(interval) + " jam yang lalu";
+        return Math.floor(interval) + " jam lalu";
       }
       interval = seconds / 60;
       if (interval > 1) {
-        return Math.floor(interval) + " menityang lalu";
+        return Math.floor(interval) + " menit lalu";
       }
-      return Math.floor(seconds) + " detik yang lalu";
+      return Math.floor(seconds) + " detik lalu";
     }
  
     
