@@ -202,9 +202,14 @@ class barangController {
           result.stok = parseFloat(result.stok) + parseFloat(req.body.stok)
           console.log(result.stok)
           result.save()
-          if(barang.minimal_stok <= result.stok)
+          if(result.minimal_stok <= result.stok)
           {
-            await notif.destroy({where : { message: result.nama} });
+            await notif.destroy({where :  { message : 
+              {
+               [Op.substring]: result.nama
+              }
+            }
+          });
           }
 
           res.status(200).json({
