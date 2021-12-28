@@ -14,7 +14,7 @@ module.exports = (sequelize, DataTypes) => {
     }
   };
   barang.init({
-    c: DataTypes.STRING,
+    nama: DataTypes.STRING,
     stok: DataTypes.FLOAT,
     harga: DataTypes.DECIMAL,
     minimal_stok: DataTypes.FLOAT,
