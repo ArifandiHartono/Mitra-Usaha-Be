@@ -1,5 +1,5 @@
 const tokenGenerator = require('../services/token-generator');
-const { barang, kategori } = require('../models');
+const { barang, kategori, notif} = require('../models');
 const config = require('../config');
 const { compareSync } = require('bcrypt');
 const bcrypt = require('bcrypt');
@@ -202,6 +202,11 @@ class barangController {
           result.stok = parseFloat(result.stok) + parseFloat(req.body.stok)
           console.log(result.stock)
           result.save()
+          if(barang.minimal_stok <= result.stok)
+          {
+            await notif.destroy({where : { nama: result.nama} });
+          }
+
           res.status(200).json({
             status: 'Success',
             data: result,
