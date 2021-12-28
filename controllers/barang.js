@@ -200,11 +200,11 @@ class barangController {
         try {
           const result = await barang.findByPk(req.params.id);
           result.stok = parseFloat(result.stok) + parseFloat(req.body.stok)
-          console.log(result.stock)
+          console.log(result.stok)
           result.save()
           if(barang.minimal_stok <= result.stok)
           {
-            await notif.destroy({where : { nama: result.nama} });
+            await notif.destroy({where : { message: result.nama} });
           }
 
           res.status(200).json({
